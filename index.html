@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Fatih Sultan Mehmet AR</title>
+
+  <script type="module"
+    src="https://cdn.jsdelivr.net/npm/@google/model-viewer/dist/model-viewer.min.js">
+  </script>
+
+  <style>
+    body {
+      margin: 0;
+      background: #ffffff;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 100vh;
+      display: none; /* Başta gizli olacak */
+    }
+
+    .btn {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      padding: 22px 40px;
+      border: none;
+      border-radius: 14px;
+      font-size: 22px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      display: none; /* Başta gizli */
+    }
+
+    .center-btn {
+      top: 20px;
+      background: #1a1a1a;
+      color: white;
+    }
+
+    .ar-btn {
+      bottom: 20px;
+      background: #000000;
+      color: white;
+    }
+
+    /* BİLGİ KARTI STİLİ */
+    #infoCard {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 400px;
+      background: #fffbe6;
+      border: 3px solid #f5c518;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      text-align: center;
+      z-index: 10000;
+    }
+
+    #infoCard h2 {
+      margin-top: 0;
+      color: #b38f00;
+    }
+
+    #infoCard button {
+      margin-top: 20px;
+      padding: 14px 28px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: none;
+      background: #b38f00;
+      color: white;
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<!-- BİLGİ KARTI -->
+<div id="infoCard">
+  <h2>Fatih Sultan Mehmet 3D AR Modeli</h2>
+  <p>
+    - Telefonunuzdan sayfayı açın.<br>
+    - Karakteri döndürmek için dokunun.<br>
+    - Ortala butonuna basarak modeli merkeze getirin.<br>
+    - Kamerada Gör butonuna basarak AR deneyimini açın.
+  </p>
+  <button id="startBtn">Tamam, Başlayalım!</button>
+</div>
+
+<!-- MODEL -->
+<model-viewer
+    id="viewer"
+    src="fatih.glb"
+    ar
+    ar-modes="scene-viewer quick-look"
+    ar-placement="floor"
+    ar-scale="auto"
+    camera-controls
+    auto-rotate
+    field-of-view="30deg"
+    touch-action="pan-y">
+</model-viewer>
+
+<!-- BUTONLAR -->
+<button class="btn center-btn" id="centerBtn">🎯 Karakteri Ortala</button>
+<button class="btn ar-btn" id="arBtn">📷 Kamerada Gör (AR)</button>
+
+<script>
+  const infoCard = document.getElementById('infoCard');
+  const startBtn = document.getElementById('startBtn');
+  const viewer = document.getElementById('viewer');
+  const centerBtn = document.getElementById('centerBtn');
+  const arBtn = document.getElementById('arBtn');
+
+  // MODELİ GEÇİCİ OLARAK ORTALAMA FONKSİYONU
+  function centerModel() {
+    // Modelin Y eksenini yüksek taşıyoruz (pivot altta olsa bile)
+    viewer.model.setAttribute('position', '0 4 0'); // 4 metrelik geçici değer
+    viewer.cameraOrbit = '0deg 90deg 2.5m';
+    viewer.cameraTarget = '0m 4m 0m';
+    viewer.fieldOfView = '30deg';
+  }
+
+  // Başla butonuna basılınca
+  startBtn.addEventListener('click', () => {
+    infoCard.style.display = 'none';   // Bilgi kartını gizle
+    viewer.style.display = 'block';     // Modeli göster
+    centerBtn.style.display = 'block';
+    arBtn.style.display = 'block';
+    centerModel();                      // Modeli ortala
+  });
+
+  // Ortala butonu
+  centerBtn.addEventListener('click', () => {
+    centerModel();
+  });
+
+  // AR butonu
+  arBtn.addEventListener('click', () => {
+    viewer.activateAR();
+  });
+
+  // Sayfa yüklenince model ve butonlar gizli
+  viewer.style.display = 'none';
+  centerBtn.style.display = 'none';
+  arBtn.style.display = 'none';
+
+</script>
+
+</body>
+</html>
