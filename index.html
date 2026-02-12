@@ -55,15 +55,15 @@
       position: fixed;
       left: 50%;
       transform: translateX(-50%);
-      width: 280px;
-      height: 60px;
+      width: 280px; /* Her iki butonun genişliği aynı */
+      height: 60px;  /* Her iki butonun yüksekliği aynı */
       border-radius: 30px;
       font-size: 18px;
       font-weight: bold;
       cursor: pointer;
       border: none;
       z-index: 1000;
-      display: none;
+      display: none; /* Başta gizli */
       align-items: center;
       justify-content: center;
       box-shadow: 0 5px 15px rgba(0,0,0,0.4);
@@ -83,6 +83,8 @@
       color: #ffffff;
       border: 2px solid #f5c518;
     }
+
+    #ar-button:active { background: #333; }
   </style>
 </head>
 <body>
@@ -118,6 +120,7 @@
     const centerBtn = document.getElementById('centerBtn');
     const arBtn = document.getElementById('ar-button');
 
+    // Başlat butonu fonksiyonu
     startBtn.addEventListener('click', () => {
       infoCard.style.display = 'none';
       viewer.style.display = 'block';
@@ -125,6 +128,7 @@
       arBtn.style.display = 'flex';
     });
 
+    // Görünümü Sıfırla butonu fonksiyonu
     centerBtn.addEventListener('click', () => {
       viewer.cameraOrbit = '0deg 75deg 105%';
       viewer.cameraTarget = 'auto auto auto';
