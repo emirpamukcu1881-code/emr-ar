@@ -11,7 +11,7 @@
     body {
       margin: 0;
       background: #ffffff;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
       overflow: hidden;
     }
 
@@ -21,24 +21,25 @@
       display: none;
     }
 
+    /* GİRİŞ KARTI */
     #infoCard {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 85%;
+      width: 80%;
       max-width: 350px;
       background: white;
       border-radius: 20px;
       padding: 30px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.3);
       text-align: center;
-      z-index: 1001;
+      z-index: 2000;
     }
 
     #startBtn {
       margin-top: 20px;
-      padding: 15px 30px;
+      padding: 15px;
       background: #b38f00;
       color: white;
       border: none;
@@ -49,14 +50,14 @@
       cursor: pointer;
     }
 
-    /* BUTONLARIN ORTAK STİLİ (BOYUTLAR EŞİTLENDİ) */
+    /* BUTONLAR - BİREBİR AYNI BOYUT */
     .action-btn {
       position: fixed;
       left: 50%;
       transform: translateX(-50%);
-      width: 280px; /* Genişlik aynı */
-      height: 60px;  /* Yükseklik aynı */
-      border-radius: 30px; /* Kenar ovali aynı */
+      width: 280px;
+      height: 60px;
+      border-radius: 30px;
       font-size: 18px;
       font-weight: bold;
       cursor: pointer;
@@ -65,37 +66,31 @@
       display: none;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-      transition: all 0.3s;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.4);
     }
 
-    /* ORTALAMA BUTONU (EN ÜSTTE) */
+    /* EN ÜSTTEKİ BUTON */
     #centerBtn {
       top: 30px; 
-      background: rgba(26, 26, 26, 0.9);
+      background: #1a1a1a;
       color: white;
     }
 
-    /* KAMERADA GÖR BUTONU (EN ALTTA) */
+    /* EN ALTTAKİ BUTON */
     #ar-button {
       bottom: 40px; 
       background: #000000;
       color: #ffffff;
       border: 2px solid #f5c518;
     }
-
-    #ar-button:active { background: #333; }
   </style>
 </head>
 <body>
 
   <div id="infoCard">
     <h2 style="color:#b38f00">Fatih Sultan Mehmet</h2>
-    <p>
-        ✅ <b>Büyütme/Küçültme:</b> İki parmağınızı ekranda açıp kapatın.<br>
-        ✅ <b>Yer Değiştirme:</b> Modeli tek parmağınızla sürükleyin.
-    </p>
-    <button id="startBtn">Anladım, Başla</button>
+    <p>3D Modeli incelemek için başlayın.</p>
+    <button id="startBtn">Başlayalım!</button>
   </div>
 
   <button class="action-btn" id="centerBtn">🎯 Görünümü Sıfırla</button>
@@ -104,6 +99,40 @@
     id="viewer"
     src="fatih.glb" 
     ar 
+    ar-modes="scene-viewer webxr quick-look" 
+    camera-controls 
+    ar-placement="floor"
+    shadow-intensity="1" 
+    auto-rotate>
+    
+    <button slot="ar-button" class="action-btn" id="ar-button">
+       📷 KAMERADA GÖR (AR)
+    </button>
+
+  </model-viewer>
+
+  <script>
+    const viewer = document.getElementById('viewer');
+    const infoCard = document.getElementById('infoCard');
+    const startBtn = document.getElementById('startBtn');
+    const centerBtn = document.getElementById('centerBtn');
+    const arBtn = document.getElementById('ar-button');
+
+    startBtn.addEventListener('click', () => {
+      infoCard.style.display = 'none';
+      viewer.style.display = 'block';
+      centerBtn.style.display = 'flex';
+      arBtn.style.display = 'flex';
+    });
+
+    centerBtn.addEventListener('click', () => {
+      viewer.cameraOrbit = '0deg 75deg 105%';
+      viewer.cameraTarget = 'auto auto auto';
+      viewer.fieldOfView = 'auto';
+    });
+  </script>
+</body>
+</html>
     ar-modes="webxr quick-look" 
     camera-controls 
     ar-placement="floor"
