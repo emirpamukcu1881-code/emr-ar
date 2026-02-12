@@ -49,15 +49,15 @@
       cursor: pointer;
     }
 
-    /* BUTONLAR - TAMAMEN AYNI BOYUT VE HİZADA */
+    /* BUTONLAR - TAMAMEN AYNI BOYUT VE DAHA YUKARIDA */
     .action-btn {
       position: fixed;
       left: 50%;
       transform: translateX(-50%);
-      width: 260px; /* Genişlik sabitlendi */
-      height: 55px;  /* Yükseklik sabitlendi */
-      border-radius: 30px;
-      font-size: 17px;
+      width: 280px; /* Genişlik sabit */
+      height: 65px;  /* Yükseklik sabit */
+      border-radius: 35px;
+      font-size: 18px;
       font-weight: bold;
       cursor: pointer;
       border: none;
@@ -65,24 +65,24 @@
       display: none;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.4);
-      transition: transform 0.2s;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      transition: all 0.2s;
     }
 
-    .action-btn:active { transform: translateX(-50%) scale(0.95); }
-
     #centerBtn {
-      bottom: 165px; 
+      bottom: 210px; /* Daha yukarı çekildi */
       background: #1a1a1a;
       color: white;
     }
 
     #ar-button {
-      bottom: 95px; 
+      bottom: 130px; /* Ortalama butonunun altına, ama hala yukarıda */
       background: #000000;
       color: #ffffff;
       border: 2px solid #f5c518;
     }
+
+    #ar-button:active { transform: translateX(-50%) scale(0.95); }
   </style>
 </head>
 <body>
@@ -90,7 +90,8 @@
   <div id="infoCard">
     <h2 style="color:#b38f00">Fatih Sultan Mehmet</h2>
     <p>
-        Kamerayı yere tutun, o <b>kare</b> çıktığında modeli sürükleyin ve iki parmağınızla boyutunu ayarlayın.
+        ✅ <b>Kolay Yerleşim:</b> Kamerayı zemine tutup yavaşça hareket ettirin.<br>
+        ✅ <b>Kontrol:</b> İki parmakla büyütün, tek parmakla sürükleyin.
     </p>
     <button id="startBtn">Anladım, Başla</button>
   </div>
@@ -101,9 +102,41 @@
     id="viewer"
     src="fatih.glb" 
     ar 
-    ar-modes="webxr scene-viewer quick-look" 
+    ar-modes="scene-viewer webxr quick-look" 
     camera-controls 
     ar-placement="floor"
+    ar-scale="auto"
+    shadow-intensity="2" 
+    auto-rotate
+    interaction-prompt="auto"> 
+    
+    <button slot="ar-button" class="action-btn" id="ar-button">
+       📷 KAMERADA GÖR (AR)
+    </button>
+
+  </model-viewer>
+
+  <script>
+    const viewer = document.getElementById('viewer');
+    const infoCard = document.getElementById('infoCard');
+    const startBtn = document.getElementById('startBtn');
+    const centerBtn = document.getElementById('centerBtn');
+    const arBtn = document.getElementById('ar-button');
+
+    startBtn.addEventListener('click', () => {
+      infoCard.style.display = 'none';
+      viewer.style.display = 'block';
+      centerBtn.style.display = 'flex';
+      arBtn.style.display = 'flex';
+    });
+
+    centerBtn.addEventListener('click', () => {
+      viewer.cameraOrbit = '0deg 75deg 105%';
+      viewer.cameraTarget = 'auto auto auto';
+    });
+  </script>
+</body>
+</html>
     ar-scale="auto"
     interaction-prompt="auto"
     shadow-intensity="2" 
