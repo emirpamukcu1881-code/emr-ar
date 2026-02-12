@@ -1,109 +1,172 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fatih Sultan Mehmet AR</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fatih Sultan Mehmet AR</title>
 
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer/dist/model-viewer.min.js"></script>
 
-    <style>
-        body {
-            margin: 0;
-            background: #ffffff;
-            font-family: 'Segoe UI', sans-serif;
-            overflow: hidden;
-        }
+  <style>
+    body {
+      margin: 0;
+      background: #ffffff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+    }
 
-        model-viewer {
-            width: 100%;
-            height: 100vh;
-            display: none; /* Başlangıçta gizli */
-            background-color: #eee;
-        }
+    model-viewer {
+      width: 100%;
+      height: 100vh;
+      display: none; /* Başta gizli */
+      --progress-bar-color: #b38f00;
+    }
 
-        /* ÖZEL AR BUTONU (MODEL ÜSTÜNDE) */
-        #ar-button {
-            background-image: url(https://modelviewer.dev/shared-assets/icons/ar_icon.png);
-            background-repeat: no-repeat;
-            background-size: 20px 20px;
-            background-position: 12px 50%;
-            background-color: #fff;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
-            bottom: 30px;
-            padding: 0 16px 0 40px;
-            font-family: Roboto Regular, Helvetica Neue, sans-serif;
-            font-size: 14px;
-            color: #4285f4;
-            height: 36px;
-            line-height: 36px;
-            border-radius: 18px;
-            border: 1px solid #DADCE0;
-            display: none; /* Başlangıçta gizli */
-            z-index: 999;
-            cursor: pointer;
-        }
+    /* BİLGİ KARTI */
+    #infoCard {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 85%;
+      max-width: 350px;
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      text-align: center;
+      z-index: 1001;
+    }
 
-        #ar-button:active { background-color: #E8F0FE; }
-        #ar-button:focus { outline: none; }
+    #infoCard h2 { color: #b38f00; margin-top: 0; }
 
-        /* BİLGİ KARTI */
-        #infoCard {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 85%;
-            max-width: 350px;
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            text-align: center;
-            z-index: 1001;
-        }
+    #startBtn {
+      margin-top: 20px;
+      padding: 15px 30px;
+      background: #b38f00;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 18px;
+      font-weight: bold;
+      width: 100%;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(179, 143, 0, 0.4);
+    }
 
-        #startBtn {
-            margin-top: 20px;
-            padding: 15px 30px;
-            background: #b38f00;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 18px;
-            width: 100%;
-            cursor: pointer;
-        }
+    /* MODELİ ORTALA BUTONU */
+    .center-btn {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      padding: 12px 24px;
+      background: rgba(26, 26, 26, 0.8);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      display: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-        .center-btn {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            padding: 12px 20px;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            border: none;
-            border-radius: 30px;
-            display: none;
-        }
-    </style>
+    /* KAMERADA GÖR (AR) BUTONU - EN ÖNEMLİ KISIM */
+    #ar-button {
+      background-color: #000000;
+      color: #ffffff;
+      border-radius: 50px;
+      border: none;
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 18px 36px;
+      font-size: 18px;
+      font-weight: bold;
+      display: none; /* Başta gizli */
+      z-index: 999;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+      white-space: nowrap;
+    }
+
+    #ar-button:active { background-color: #333; }
+
+    /* Model Viewer Yükleme Çubuğu */
+    .progress-bar { display: block; width: 33%; height: 10%; max-height: 2%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 25px; box-shadow: 0px 3px 10px 3px rgba(0, 0, 0, 0.5), 0px 0px 5px 1px rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.9); background-color: rgba(0, 0, 0, 0.5); }
+    .update-bar { background-color: #b38f00; width: 0%; height: 100%; border-radius: 25px; transition: width 0.3s; }
+
+  </style>
 </head>
 <body>
 
-    <div id="infoCard">
-        <h2 style="color:#b38f00">Fatih Sultan Mehmet</h2>
-        <p>Modeli AR ile görmek için "Başlayalım" ardından alttaki "Kamerada Gör" butonuna basın.</p>
-        <button id="startBtn">Başlayalım!</button>
+  <div id="infoCard">
+    <h2>Fatih Sultan Mehmet</h2>
+    <p>3D Modeli incelemek için başlayın. AR deneyimi için alttaki siyah butonu kullanın.</p>
+    <button id="startBtn">Başlayalım!</button>
+  </div>
+
+  <button class="center-btn" id="centerBtn">🎯 Modeli Ortala</button>
+
+  <model-viewer 
+    id="viewer"
+    src="fatih.glb" 
+    ar 
+    ar-modes="webxr scene-viewer quick-look" 
+    camera-controls 
+    ar-placement="floor"
+    shadow-intensity="1.5" 
+    auto-rotate
+    touch-action="pan-y">
+    
+    <div class="progress-bar" slot="progress-bar">
+        <div class="update-bar"></div>
     </div>
 
-    <button class="center-btn" id="centerBtn">🎯 Modeli Ortala</button>
+    <button slot="ar-button" id="ar-button">
+       📷 KAMERADA GÖR (AR)
+    </button>
 
-    <model-viewer 
+  </model-viewer>
+
+  <script>
+    const viewer = document.getElementById('viewer');
+    const infoCard = document.getElementById('infoCard');
+    const startBtn = document.getElementById('startBtn');
+    const centerBtn = document.getElementById('centerBtn');
+    const arBtn = document.getElementById('ar-button');
+
+    // Başlat butonu fonksiyonu
+    startBtn.addEventListener('click', () => {
+      infoCard.style.display = 'none';
+      viewer.style.display = 'block';
+      centerBtn.style.display = 'block';
+      arBtn.style.display = 'block';
+    });
+
+    // Ortala butonu fonksiyonu
+    centerBtn.addEventListener('click', () => {
+      viewer.cameraOrbit = '0deg 75deg 105%';
+      viewer.cameraTarget = 'auto auto auto';
+      viewer.fieldOfView = 'auto';
+    });
+
+    // Model yüklenirken ilerleme çubuğu kontrolü
+    viewer.addEventListener('progress', (event) => {
+      const progressBar = event.target.querySelector('.update-bar');
+      if (progressBar) {
+        progressBar.style.width = `${event.detail.totalProgress * 100}%`;
+        if (event.detail.totalProgress === 1) {
+          setTimeout(() => {
+            event.target.querySelector('.progress-bar').style.display = 'none';
+          }, 500);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
         id="viewer"
         src="fatih.glb" 
         ar 
