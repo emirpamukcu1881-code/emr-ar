@@ -11,7 +11,7 @@
     body {
       margin: 0;
       background: #ffffff;
-      font-family: 'Segoe UI', Tahoma, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       overflow: hidden;
     }
 
@@ -21,25 +21,24 @@
       display: none;
     }
 
-    /* GİRİŞ KARTI */
     #infoCard {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 80%;
+      width: 85%;
       max-width: 350px;
       background: white;
       border-radius: 20px;
       padding: 30px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.3);
       text-align: center;
-      z-index: 2000;
+      z-index: 1001;
     }
 
     #startBtn {
       margin-top: 20px;
-      padding: 15px;
+      padding: 15px 30px;
       background: #b38f00;
       color: white;
       border: none;
@@ -50,29 +49,29 @@
       cursor: pointer;
     }
 
-    /* BUTONLAR - BİREBİR AYNI BOYUT */
+    /* BUTONLARIN ORTAK STİLİ (TAMAMEN AYNI BOYUT) */
     .action-btn {
       position: fixed;
       left: 50%;
       transform: translateX(-50%);
-      width: 280px; /* Her iki butonun genişliği aynı */
-      height: 60px;  /* Her iki butonun yüksekliği aynı */
+      width: 280px; 
+      height: 60px;  
       border-radius: 30px;
       font-size: 18px;
       font-weight: bold;
       cursor: pointer;
       border: none;
       z-index: 1000;
-      display: none; /* Başta gizli */
+      display: none; 
       align-items: center;
       justify-content: center;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
     }
 
     /* EN ÜSTTEKİ BUTON */
     #centerBtn {
       top: 30px; 
-      background: #1a1a1a;
+      background: rgba(26, 26, 26, 0.9);
       color: white;
     }
 
@@ -83,8 +82,6 @@
       color: #ffffff;
       border: 2px solid #f5c518;
     }
-
-    #ar-button:active { background: #333; }
   </style>
 </head>
 <body>
@@ -101,10 +98,10 @@
     id="viewer"
     src="fatih.glb" 
     ar 
-    ar-modes="scene-viewer webxr quick-look" 
+    ar-modes="webxr quick-look" 
     camera-controls 
     ar-placement="floor"
-    shadow-intensity="1" 
+    shadow-intensity="1.5" 
     auto-rotate>
     
     <button slot="ar-button" class="action-btn" id="ar-button">
@@ -120,7 +117,6 @@
     const centerBtn = document.getElementById('centerBtn');
     const arBtn = document.getElementById('ar-button');
 
-    // Başlat butonu fonksiyonu
     startBtn.addEventListener('click', () => {
       infoCard.style.display = 'none';
       viewer.style.display = 'block';
@@ -128,7 +124,6 @@
       arBtn.style.display = 'flex';
     });
 
-    // Görünümü Sıfırla butonu fonksiyonu
     centerBtn.addEventListener('click', () => {
       viewer.cameraOrbit = '0deg 75deg 105%';
       viewer.cameraTarget = 'auto auto auto';
