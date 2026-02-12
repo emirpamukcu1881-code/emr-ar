@@ -49,51 +49,57 @@
       cursor: pointer;
     }
 
-    /* KAMERADA GÖR BUTONU - ÇOK DAHA YUKARIYA ALINDI */
-    #ar-button {
-      background-color: #000000;
-      color: #ffffff;
-      border-radius: 50px;
-      border: none;
-      position: absolute;
-      bottom: 220px; /* Telefonlarda rahat görünmesi için iyice yukarı çekildi */
+    /* BUTONLARIN ORTAK STİLİ (AYNI BOYUT) */
+    .action-btn {
+      position: fixed;
       left: 50%;
       transform: translateX(-50%);
-      padding: 20px 40px;
-      font-size: 20px;
+      width: 280px; /* Her iki butonun genişliği aynı */
+      height: 60px;  /* Her iki butonun yüksekliği aynı */
+      border-radius: 30px;
+      font-size: 18px;
       font-weight: bold;
-      display: none;
-      z-index: 999;
       cursor: pointer;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-      border: 2px solid #f5c518; /* Daha dikkat çekici olması için altın çerçeve */
+      border: none;
+      z-index: 1000;
+      display: none; /* Başta gizli */
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
     }
 
-    .center-btn {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1000;
-      padding: 12px 24px;
-      background: rgba(0, 0, 0, 0.7);
+    /* ORTALAMA BUTONU (ÜSTTE) */
+    #centerBtn {
+      bottom: 180px; /* Kamerada Gör butonunun üstünde durması için */
+      background: rgba(26, 26, 26, 0.9);
       color: white;
-      border: none;
-      border-radius: 30px;
-      display: none;
-      cursor: pointer;
     }
+
+    /* KAMERADA GÖR BUTONU (ALTTA) */
+    #ar-button {
+      bottom: 100px; /* Telefonlardaki sistem çubuğunun üstüne çekildi */
+      background: #000000;
+      color: #ffffff;
+      border: 2px solid #f5c518;
+    }
+
+    #ar-button:active { background: #333; }
   </style>
 </head>
 <body>
 
   <div id="infoCard">
     <h2 style="color:#b38f00">Fatih Sultan Mehmet</h2>
-    <p>Kamerada açıldığında modeli <b>iki parmağınızla büyütebilir</b> ve parmağınızla <b>yerini değiştirebilirsiniz</b>.</p>
+    <p>
+        ✅ <b>Büyütme/Küçültme:</b> İki parmağınızı ekranda açıp kapatın.<br>
+        ✅ <b>Yer Değiştirme:</b> Modeli tek parmağınızla sürükleyin.
+    </p>
     <button id="startBtn">Anladım, Başla</button>
   </div>
 
-  <button class="center-btn" id="centerBtn">🎯 Görünümü Sıfırla</button>
+  <button class="action-btn" id="centerBtn">🎯 Görünümü Sıfırla</button>
 
   <model-viewer 
     id="viewer"
@@ -103,7 +109,40 @@
     camera-controls 
     ar-placement="floor"
     ar-scale="auto" 
+    can-scale="true"
+    xr-environment
     shadow-intensity="1.5" 
+    auto-rotate
+    touch-action="none"> 
+    
+    <button slot="ar-button" class="action-btn" id="ar-button">
+       📷 KAMERADA GÖR (AR)
+    </button>
+
+  </model-viewer>
+
+  <script>
+    const viewer = document.getElementById('viewer');
+    const infoCard = document.getElementById('infoCard');
+    const startBtn = document.getElementById('startBtn');
+    const centerBtn = document.getElementById('centerBtn');
+    const arBtn = document.getElementById('ar-button');
+
+    startBtn.addEventListener('click', () => {
+      infoCard.style.display = 'none';
+      viewer.style.display = 'block';
+      centerBtn.style.display = 'flex'; // Butonu göster
+      arBtn.style.display = 'flex';     // AR butonunu göster
+    });
+
+    centerBtn.addEventListener('click', () => {
+      viewer.cameraOrbit = '0deg 75deg 105%';
+      viewer.cameraTarget = 'auto auto auto';
+      viewer.fieldOfView = 'auto';
+    });
+  </script>
+</body>
+</html>
     auto-rotate
     touch-action="none"> <button slot="ar-button" id="ar-button">
        📷 KAMERADA GÖR (AR)
