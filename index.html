@@ -49,43 +49,40 @@
       cursor: pointer;
     }
 
-    /* BUTONLARIN ORTAK STİLİ (AYNI BOYUT) */
+    /* BUTONLAR - TAMAMEN AYNI BOYUT VE HİZADA */
     .action-btn {
       position: fixed;
       left: 50%;
       transform: translateX(-50%);
-      width: 280px; /* Her iki butonun genişliği aynı */
-      height: 60px;  /* Her iki butonun yüksekliği aynı */
+      width: 260px; /* Genişlik sabitlendi */
+      height: 55px;  /* Yükseklik sabitlendi */
       border-radius: 30px;
-      font-size: 18px;
+      font-size: 17px;
       font-weight: bold;
       cursor: pointer;
       border: none;
       z-index: 1000;
-      display: none; /* Başta gizli */
-      transition: all 0.3s;
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+      transition: transform 0.2s;
     }
 
-    /* ORTALAMA BUTONU (ÜSTTE) */
+    .action-btn:active { transform: translateX(-50%) scale(0.95); }
+
     #centerBtn {
-      bottom: 180px; /* Kamerada Gör butonunun üstünde durması için */
-      background: rgba(26, 26, 26, 0.9);
+      bottom: 165px; 
+      background: #1a1a1a;
       color: white;
     }
 
-    /* KAMERADA GÖR BUTONU (ALTTA) */
     #ar-button {
-      bottom: 100px; /* Telefonlardaki sistem çubuğunun üstüne çekildi */
+      bottom: 95px; 
       background: #000000;
       color: #ffffff;
       border: 2px solid #f5c518;
     }
-
-    #ar-button:active { background: #333; }
   </style>
 </head>
 <body>
@@ -93,8 +90,7 @@
   <div id="infoCard">
     <h2 style="color:#b38f00">Fatih Sultan Mehmet</h2>
     <p>
-        ✅ <b>Büyütme/Küçültme:</b> İki parmağınızı ekranda açıp kapatın.<br>
-        ✅ <b>Yer Değiştirme:</b> Modeli tek parmağınızla sürükleyin.
+        Kamerayı yere tutun, o <b>kare</b> çıktığında modeli sürükleyin ve iki parmağınızla boyutunu ayarlayın.
     </p>
     <button id="startBtn">Anladım, Başla</button>
   </div>
@@ -104,6 +100,43 @@
   <model-viewer 
     id="viewer"
     src="fatih.glb" 
+    ar 
+    ar-modes="webxr scene-viewer quick-look" 
+    camera-controls 
+    ar-placement="floor"
+    ar-scale="auto"
+    interaction-prompt="auto"
+    shadow-intensity="2" 
+    auto-rotate
+    touch-action="none"> 
+    
+    <button slot="ar-button" class="action-btn" id="ar-button">
+       📷 KAMERADA GÖR (AR)
+    </button>
+
+  </model-viewer>
+
+  <script>
+    const viewer = document.getElementById('viewer');
+    const infoCard = document.getElementById('infoCard');
+    const startBtn = document.getElementById('startBtn');
+    const centerBtn = document.getElementById('centerBtn');
+    const arBtn = document.getElementById('ar-button');
+
+    startBtn.addEventListener('click', () => {
+      infoCard.style.display = 'none';
+      viewer.style.display = 'block';
+      centerBtn.style.display = 'flex';
+      arBtn.style.display = 'flex';
+    });
+
+    centerBtn.addEventListener('click', () => {
+      viewer.cameraOrbit = '0deg 75deg 105%';
+      viewer.cameraTarget = 'auto auto auto';
+    });
+  </script>
+</body>
+</html>
     ar 
     ar-modes="webxr quick-look" 
     camera-controls 
