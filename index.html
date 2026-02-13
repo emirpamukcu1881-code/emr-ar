@@ -148,3 +148,47 @@
   </script>
 </body>
 </html>
+    src="fatih.glb" 
+    ar 
+    ar-modes="webxr quick-look" 
+    camera-controls 
+    ar-placement="floor"
+    shadow-intensity="1.5" 
+    auto-rotate>
+    
+    <button slot="ar-button" class="action-btn" id="ar-button" title="AR Modu">
+       📷
+    </button>
+
+  </model-viewer>
+
+  <script>
+    const viewer = document.getElementById('viewer');
+    const infoCard = document.getElementById('infoCard');
+    const startBtn = document.getElementById('startBtn');
+    const centerBtn = document.getElementById('centerBtn');
+    const arBtn = document.getElementById('ar-button');
+    const bgMusic = document.getElementById('bgMusic');
+
+    startBtn.addEventListener('click', () => {
+      infoCard.style.display = 'none';
+      viewer.style.display = 'block';
+      centerBtn.style.display = 'flex';
+      arBtn.style.display = 'flex';
+    });
+
+    centerBtn.addEventListener('click', () => {
+      viewer.cameraOrbit = '0deg 75deg 105%';
+      viewer.cameraTarget = 'auto auto auto';
+      viewer.fieldOfView = 'auto';
+    });
+
+    // Kamerada Gör (AR) butonuna basıldığında müzik başlar
+    arBtn.addEventListener('click', () => {
+      bgMusic.play().catch(error => {
+        console.log("Müzik çalma engellendi: ", error);
+      });
+    });
+  </script>
+</body>
+</html>
