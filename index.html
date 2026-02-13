@@ -91,12 +91,13 @@
 </head>
 <body>
 
-  <audio id="bgMusic" src="muzik.mp3" preload="auto"></audio>
+  <audio id="bgMusic" src="muzik.mp3" preload="auto" loop></audio>
 
   <div id="infoCard">
     <h2 style="color:#b38f00">Fatih Sultan Mehmet</h2>
-    <p>İstanbul'un fatihi, büyük devlet adamı ve entelektüel deha Sultan II. Mehmed'in 3D modelini deneyimlemek üzeresiniz.</p>
-    <p>Modeli çevrenize yerleştirmek için kamera butonunu kullanabilir, detayları yakından inceleyebilirsiniz. Tarihi dokuyu hissetmek için AR modunu başlatın.</p>
+    <p>İstanbul'un fatihi, büyük devlet adamı ve askeri deha Sultan II. Mehmed'in detaylı 3D modelini incelemek üzeresiniz.</p>
+    <p>Modeli parmağınızla döndürebilir, sağ üstteki kamera butonu ile gerçek dünyada, odanızın ortasında görebilirsiniz. Bu deneyim, tarihi figürleri modern teknolojiyle birleştirerek size eşsiz bir perspektif sunar.</p>
+    <p>Görünümü sıfırlamak için sol üstteki hedef ikonuna tıklamanız yeterlidir.</p>
     <button id="startBtn">Başlayalım!</button>
   </div>
 
@@ -112,7 +113,7 @@
     shadow-intensity="1.5" 
     auto-rotate>
     
-    <button slot="ar-button" class="action-btn" id="ar-button" title="AR Modu">
+    <button slot="ar-button" class="action-btn" id="ar-button" title="AR Modu" onclick="document.getElementById('bgMusic').play()">
        📷
     </button>
 
@@ -139,55 +140,9 @@
       viewer.fieldOfView = 'auto';
     });
 
-    // Kamerada Gör (AR) butonuna basıldığında müzik başlar
+    // Bazı cihazlarda onclick çalışmazsa diye event listener korundu
     arBtn.addEventListener('click', () => {
-      bgMusic.play().catch(error => {
-        console.log("Müzik çalma engellendi: ", error);
-      });
-    });
-  </script>
-</body>
-</html>
-    src="fatih.glb" 
-    ar 
-    ar-modes="webxr quick-look" 
-    camera-controls 
-    ar-placement="floor"
-    shadow-intensity="1.5" 
-    auto-rotate>
-    
-    <button slot="ar-button" class="action-btn" id="ar-button" title="AR Modu">
-       📷
-    </button>
-
-  </model-viewer>
-
-  <script>
-    const viewer = document.getElementById('viewer');
-    const infoCard = document.getElementById('infoCard');
-    const startBtn = document.getElementById('startBtn');
-    const centerBtn = document.getElementById('centerBtn');
-    const arBtn = document.getElementById('ar-button');
-    const bgMusic = document.getElementById('bgMusic');
-
-    startBtn.addEventListener('click', () => {
-      infoCard.style.display = 'none';
-      viewer.style.display = 'block';
-      centerBtn.style.display = 'flex';
-      arBtn.style.display = 'flex';
-    });
-
-    centerBtn.addEventListener('click', () => {
-      viewer.cameraOrbit = '0deg 75deg 105%';
-      viewer.cameraTarget = 'auto auto auto';
-      viewer.fieldOfView = 'auto';
-    });
-
-    // Kamerada Gör (AR) butonuna basıldığında müzik başlar
-    arBtn.addEventListener('click', () => {
-      bgMusic.play().catch(error => {
-        console.log("Müzik çalma engellendi: ", error);
-      });
+      bgMusic.play().catch(e => console.log("Ses başlatılamadı:", e));
     });
   </script>
 </body>
