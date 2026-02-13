@@ -49,15 +49,13 @@
       cursor: pointer;
     }
 
-    /* BUTONLARIN ORTAK STİLİ (TAMAMEN AYNI BOYUT) */
+    /* DAİRESEL BUTONLARIN ORTAK STİLİ */
     .action-btn {
       position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 280px; 
-      height: 60px;  
-      border-radius: 30px;
-      font-size: 18px;
+      width: 55px;
+      height: 55px;
+      border-radius: 50%; 
+      font-size: 22px;
       font-weight: bold;
       cursor: pointer;
       border: none;
@@ -65,34 +63,44 @@
       display: none; 
       align-items: center;
       justify-content: center;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: transform 0.2s;
     }
 
-    /* EN ÜSTTEKİ BUTON */
+    .action-btn:active {
+      transform: scale(0.9);
+    }
+
+    /* SOL ÜST KÖŞE: SIFIRLA BUTONU */
     #centerBtn {
-      top: 30px; 
+      top: 20px; 
+      left: 20px;
       background: rgba(26, 26, 26, 0.9);
       color: white;
     }
 
-    /* EN ALTTAKİ BUTON */
+    /* SAĞ ÜST KÖŞE: AR BUTONU */
     #ar-button {
-      bottom: 40px; 
-      background: #000000;
-      color: #ffffff;
-      border: 2px solid #f5c518;
+      top: 20px; 
+      right: 20px;
+      background: #f5c518;
+      color: #000000;
+      border: 2px solid #000000;
     }
   </style>
 </head>
 <body>
 
+  <audio id="bgMusic" src="muzik.mp3" preload="auto"></audio>
+
   <div id="infoCard">
     <h2 style="color:#b38f00">Fatih Sultan Mehmet</h2>
-    <p>3D Modeli incelemek için başlayın.</p>
+    <p>İstanbul'un fatihi, büyük devlet adamı ve entelektüel deha Sultan II. Mehmed'in 3D modelini deneyimlemek üzeresiniz.</p>
+    <p>Modeli çevrenize yerleştirmek için kamera butonunu kullanabilir, detayları yakından inceleyebilirsiniz. Tarihi dokuyu hissetmek için AR modunu başlatın.</p>
     <button id="startBtn">Başlayalım!</button>
   </div>
 
-  <button class="action-btn" id="centerBtn">🎯 Görünümü Sıfırla</button>
+  <button class="action-btn" id="centerBtn" title="Görünümü Sıfırla">🎯</button>
 
   <model-viewer 
     id="viewer"
@@ -104,8 +112,8 @@
     shadow-intensity="1.5" 
     auto-rotate>
     
-    <button slot="ar-button" class="action-btn" id="ar-button">
-       📷 KAMERADA GÖR (AR)
+    <button slot="ar-button" class="action-btn" id="ar-button" title="AR Modu">
+       📷
     </button>
 
   </model-viewer>
@@ -116,6 +124,7 @@
     const startBtn = document.getElementById('startBtn');
     const centerBtn = document.getElementById('centerBtn');
     const arBtn = document.getElementById('ar-button');
+    const bgMusic = document.getElementById('bgMusic');
 
     startBtn.addEventListener('click', () => {
       infoCard.style.display = 'none';
@@ -128,6 +137,13 @@
       viewer.cameraOrbit = '0deg 75deg 105%';
       viewer.cameraTarget = 'auto auto auto';
       viewer.fieldOfView = 'auto';
+    });
+
+    // Kamerada Gör (AR) butonuna basıldığında müzik başlar
+    arBtn.addEventListener('click', () => {
+      bgMusic.play().catch(error => {
+        console.log("Müzik çalma engellendi: ", error);
+      });
     });
   </script>
 </body>
